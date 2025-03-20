@@ -12,7 +12,7 @@ const viewer = new PANOLENS.Viewer({
     controlBar: true,
     enableVR: true, // Enable VR Mode
     autoRotate: false, // User controls the navigation
-    cameraFov: 90 // Set the initial field of view
+    cameraFov: 120 // Increased FOV to zoom out
 });
 
 // Function to add hotspots (navigation points)
@@ -38,3 +38,9 @@ addHotspot(bedroomView, livingRoomView, { x: -5000, y: 0, z: 0 }, "Back to Livin
 // Add panoramas to the viewer
 viewer.add(frontView, entranceView, livingRoomView, bedroomView, kitchenView);
 viewer.setPanorama(frontView); // Start from the front of the guest house
+
+// Adjust camera position when frontView loads to prevent zoom-in
+frontView.addEventListener("enter", () => {
+    viewer.getCamera().position.set(0, 0, 5000); // Move camera back
+    viewer.tweenControlCenter(new THREE.Vector3(0, 0, 0), 0); // Reset camera orientation
+});
